@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Script that writes its PID to a file and reacts to signals
+# Script that writes its PID to /var/run/myscript.pid and reacts to signals
 
-echo "$$" > 10-process_and_pid_file.pid
+echo "$$" > /var/run/myscript.pid
 
-trap 'echo "Y U no love me?!"; rm -f 10-process_and_pid_file.pid; exit' SIGINT
-trap 'echo "I hate the kill command"; rm -f 10-process_and_pid_file.pid; exit' SIGTERM
+trap 'echo "Y U no love me?!"; rm -f /var/run/myscript.pid; exit' SIGINT
+trap 'echo "I hate the kill command"; rm -f /var/run/myscript.pid; exit' SIGTERM
 
 while true
 do
