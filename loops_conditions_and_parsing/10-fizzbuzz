@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Display FizzBuzz from 1 to 100
+# Print FizzBuzz from 1 to 100
 
 i=1
 while [ $i -le 100 ]
