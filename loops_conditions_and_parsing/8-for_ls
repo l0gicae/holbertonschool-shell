@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Display directory content after the first dash
+
+for file in *
+do
+  if [[ "$file" == .* ]]; then
+    continue
+  fi
+  echo "${file#*-}"
+done
