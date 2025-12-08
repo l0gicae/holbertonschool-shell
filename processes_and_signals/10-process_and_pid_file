@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Script that writes its PID to /var/run/myscript.pid and reacts to signals
 
-# PID faylını düz tələb olunan ünvanda yaz
+# PID faylını tələb olunan ünvanda saxla
 echo "$$" > /var/run/myscript.pid
 
 # Ctrl+C (SIGINT) gələndə
 trap 'echo "Y U no love me?!"; rm -f /var/run/myscript.pid; exit' SIGINT
 
-# pkill və s. ilə gələn SIGTERM üçün
+# pkill və s. ilə SIGTERM gələndə
 trap 'echo "I hate the kill command"; rm -f /var/run/myscript.pid; exit' SIGTERM
 
 # Sonsuz dövr
