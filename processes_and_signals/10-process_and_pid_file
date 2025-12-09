@@ -1,6 +1,21 @@
-echo $$ > /var/run/myscript.pid
-trap 'echo "Y U no love me?!"; rm -f /var/run/myscript.pid; exit' INT
-trap 'echo "I hate the kill command"; rm -f /var/run/myscript.pid; exit' TERM
+#!/usr/bin/env bash
+# Creates /var/run/myscript.pid with its PID and handles signals
+
+PIDFILE=/var/run/myscript.pid
+
+# PID-i fayla yaz
+echo "$$" > "$PIDFILE"
+
+# SIGINT (Ctrl+C) -> mesaj, amma faylı silmək məcburi deyil
+trap 'echo "Y U no love me?!"; exit' INT
+
+# SIGTERM (kill/pkill) -> mesaj + faylı sil + çıx
+trap 'echo "I hate the kill command"; rm -f "$PIDFILE"; exit' TERM
+
+# SIGQUIT (Ctrl+\ və s.) -> faylı sil + çıx
+trap 'rm -f "$PIDFILE"; exit' QUIT
+
+# Sonsuz dövr
 while true
 do
     echo "To infinity and beyond"
