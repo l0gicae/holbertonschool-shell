@@ -1,18 +1,16 @@
 #!/usr/bin/env bash
-# Creates a PID file in /var/run/ using sudo, handles signals and loops
+# Creates a PID file in /var/run/, handles signals and loops
 
-path="/var/run/myscript.pid"
+pid_file="/var/run/myscript.pid"
 
-# Sinyal yakalayıcılar (Dosya silerken sudo kullanır)
-trap 'echo "I hate the kill command"; sudo rm -f "$path"; exit' SIGTERM
+trap 'echo "I hate the kill command"; rm -f "$pid_file"; exit' SIGTERM
 trap 'echo "Y U no love me?!"' SIGINT
-trap 'sudo rm -f "$path"; exit' SIGQUIT
+trap 'rm -f "$pid_file"; exit' SIGQUIT
 
-# PID dosyasını SUDO yetkisiyle oluştur
-echo $$ | sudo tee "$path" > /dev/null
+echo $$ > "$pid_file"
 
-# Sonsuz döngü
-while true; do
+while true
+do
     echo "To infinity and beyond"
     sleep 2
 done
