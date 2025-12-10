@@ -1,36 +1,26 @@
+cd ~/holbertonschool-shell/processes_and_signals
+
+cat > 10-process_and_pid_file << 'EOF'
 #!/usr/bin/env bash
 # Script that creates a PID file with its PID and handles signals
 
-pid_file="/var/run/myscript.pid"
-
 # PID dosyasını oluştur (kendi PID'sini yazar)
-echo "$$" > "$pid_file"
+echo "$$" > /var/run/myscript.pid
 
-# SIGINT (Ctrl+C) -> sadece mesaj, devam
-on_sigint() {
-    echo "Y U no love me?!"
-}
+# SIGINT (Ctrl+C) -> sadece mesaj, devam eder
+trap 'echo "Y U no love me?!";' INT
 
 # SIGTERM -> mesaj yaz, PID dosyasını sil ve çık
-on_sigterm() {
-    echo "I hate the kill command"
-    rm -f "$pid_file"
-    exit 0
-}
+trap 'echo "I hate the kill command"; rm -f /var/run/myscript.pid; exit 0' TERM
 
 # SIGQUIT -> PID dosyasını sil ve çık
-on_sigquit() {
-    rm -f "$pid_file"
-    exit 0
-}
-
-# Sinyalleri yakala
-trap 'on_sigint' INT
-trap 'on_sigterm' TERM
-trap 'on_sigquit' QUIT
+trap 'rm -f /var/run/myscript.pid; exit 0' QUIT
 
 # Sonsuza kadar yaz
 while true; do
     echo "To infinity and beyond"
     sleep 1
 done
+EOF
+
+chmod +x 10-process_and_pid_file
