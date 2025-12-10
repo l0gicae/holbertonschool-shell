@@ -1,33 +1,16 @@
 #!/usr/bin/env bash
-# 10-process_and_pid_file
-
-PID_FILE="/var/run/myscript.pid"
 
 # PID dosyasını oluştur (kendi PID'sini yazar)
-echo $$ > "$PID_FILE"
+echo "$$" > /var/run/myscript.pid
 
-# SIGINT -> Ctrl+C
-sigint_handler() {
-    echo "Y U no love me?!"
-}
+# SIGINT (Ctrl+C) -> sadece mesaj, script devam eder
+trap 'echo "Y U no love me?!";' INT
 
-# SIGTERM -> pkill / kill (TERM)
-sigterm_handler() {
-    echo "I hate the kill command"
-    rm -f "$PID_FILE"
-    exit 0
-}
+# SIGTERM -> mesaj yaz, PID dosyasını sil, çık
+trap 'echo "I hate the kill command"; rm -f /var/run/myscript.pid; exit 0' TERM
 
-# SIGQUIT -> genelde Ctrl+\  (veya kill -QUIT)
-sigquit_handler() {
-    rm -f "$PID_FILE"
-    exit 0
-}
-
-# Sinyalleri yakala
-trap 'sigint_handler' INT
-trap 'sigterm_handler' TERM
-trap 'sigquit_handler' QUIT
+# SIGQUIT -> PID dosyasını sil ve çık
+trap 'rm -f /var/run/myscript.pid; exit 0' QUIT
 
 # Sonsuza kadar yaz
 while true
