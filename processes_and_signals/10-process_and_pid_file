@@ -2,6 +2,7 @@
 # Creates /var/run/myscript.pid and handles signals
 
 PID_FILE="/var/run/myscript.pid"
+touch "$PID_FILE" 2>/dev/null
 echo "$$" > "$PID_FILE" 2>/dev/null
 
 cleanup_and_exit() {
