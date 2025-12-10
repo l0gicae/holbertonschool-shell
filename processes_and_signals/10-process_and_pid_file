@@ -1,20 +1,12 @@
 #!/usr/bin/env bash
-
 PID_FILE="/var/run/myscript.pid"
 
-# create PID file
 echo $$ > "$PID_FILE"
 
-# SIGTERM → message + delete PID file + exit
 trap 'echo "I hate the kill command"; rm -f "$PID_FILE"; exit 0' TERM
-
-# SIGINT → message only
 trap 'echo "Y U no love me?!";' INT
-
-# SIGQUIT → delete PID file + exit
 trap 'rm -f "$PID_FILE"; exit 0' QUIT
 
-# infinite loop
 while true
 do
     echo "To infinity and beyond"
