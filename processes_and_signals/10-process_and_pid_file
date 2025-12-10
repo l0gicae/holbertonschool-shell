@@ -1,31 +1,28 @@
 #!/usr/bin/env bash
-# Creates /var/run/myscript.pid and handles signals
+# Script that writes its PID to /var/run/myscript.pid and handles signals
 
 PID_FILE="/var/run/myscript.pid"
-touch "$PID_FILE" 2>/dev/null
-echo "$$" > "$PID_FILE" 2>/dev/null
 
-cleanup_and_exit() {
-    rm -f "$PID_FILE" 2>/dev/null
+echo $$ > "$PID_FILE"
+
+handle_sigterm() {
+    echo "I hate the kill command"
+    rm -f "$PID_FILE"
     exit 0
 }
 
-on_sigint() {
+handle_sigint() {
     echo "Y U no love me?!"
 }
 
-on_sigterm() {
-    echo "I hate the kill command"
-    cleanup_and_exit
+handle_sigquit() {
+    rm -f "$PID_FILE"
+    exit 0
 }
 
-on_sigquit() {
-    cleanup_and_exit
-}
-
-trap 'on_sigint' INT
-trap 'on_sigterm' TERM
-trap 'on_sigquit' QUIT
+trap 'handle_sigterm' TERM
+trap 'handle_sigint' INT
+trap 'handle_sigquit' QUIT
 
 while true
 do
