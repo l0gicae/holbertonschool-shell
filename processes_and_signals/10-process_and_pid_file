@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# Creates a PID file in /var/run/, handles signals and loops
 
 path="/var/run/myscript.pid"
 
