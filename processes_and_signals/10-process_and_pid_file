@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# 10-process_and_pid_file
+
+PID_FILE="/var/run/myscript.pid"
+
+# PID dosyasını oluştur (kendi PID'sini yazar)
+echo $$ > "$PID_FILE"
+
+# SIGINT -> Ctrl+C
+sigint_handler() {
+    echo "Y U no love me?!"
+}
+
+# SIGTERM -> pkill / kill (TERM)
+sigterm_handler() {
+    echo "I hate the kill command"
+    rm -f "$PID_FILE"
+    exit 0
+}
+
+# SIGQUIT -> genelde Ctrl+\  (veya kill -QUIT)
+sigquit_handler() {
+    rm -f "$PID_FILE"
+    exit 0
+}
+
+# Sinyalleri yakala
+trap 'sigint_handler' INT
+trap 'sigterm_handler' TERM
+trap 'sigquit_handler' QUIT
+
+# Sonsuza kadar yaz
+while true
+do
+    echo "To infinity and beyond"
+    sleep 1
+done
