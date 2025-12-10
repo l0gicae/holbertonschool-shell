@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
-# process and pid task
+# process and pid file
 
 PID_FILE="/var/run/myscript.pid"
+
+# allow non-root user to write pid file
+if [ ! -f "$PID_FILE" ]; then
+    touch "$PID_FILE"
+    chmod 666 "$PID_FILE"
+fi
 
 echo $$ > "$PID_FILE"
 
