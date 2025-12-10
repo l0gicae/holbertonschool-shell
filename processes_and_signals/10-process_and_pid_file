@@ -2,19 +2,19 @@
 
 PID_FILE="/var/run/myscript.pid"
 
-# PID dosyasını oluştur ve PID'i yaz
+# create PID file
 echo $$ > "$PID_FILE"
 
-# SIGTERM
+# SIGTERM → message + delete PID file + exit
 trap 'echo "I hate the kill command"; rm -f "$PID_FILE"; exit 0' TERM
 
-# SIGINT
+# SIGINT → message only
 trap 'echo "Y U no love me?!";' INT
 
-# SIGQUIT
+# SIGQUIT → delete PID file + exit
 trap 'rm -f "$PID_FILE"; exit 0' QUIT
 
-# Sonsuz döngü
+# infinite loop
 while true
 do
     echo "To infinity and beyond"
