@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
+# Bash script that creates a PID file with its PID and handles signals
 
 # PID dosyasını oluştur (kendi PID'sini yazar)
 echo "$$" > /var/run/myscript.pid
 
-# SIGINT (Ctrl+C) -> sadece mesaj, script devam eder
+# SIGINT (Ctrl+C) -> mesaj, script devam eder
 trap 'echo "Y U no love me?!";' INT
 
-# SIGTERM -> mesaj yaz, PID dosyasını sil, çık
+# SIGTERM -> mesaj, PID dosyasını sil, çık
 trap 'echo "I hate the kill command"; rm -f /var/run/myscript.pid; exit 0' TERM
 
 # SIGQUIT -> PID dosyasını sil ve çık
