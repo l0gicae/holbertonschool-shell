@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
-# process and pid file
+# process & pid file
 
 PID_FILE="/var/run/myscript.pid"
 
-# allow non-root user to write pid file
-if [ ! -f "$PID_FILE" ]; then
+# ensure pid file exists and is writable
+if [ ! -e "$PID_FILE" ]; then
     touch "$PID_FILE"
-    chmod 666 "$PID_FILE"
 fi
+chmod 666 "$PID_FILE"
 
+# write pid
 echo $$ > "$PID_FILE"
 
 trap 'echo "I hate the kill command"; rm -f "$PID_FILE"; exit 0' TERM
