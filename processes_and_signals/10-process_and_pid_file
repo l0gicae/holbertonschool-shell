@@ -2,29 +2,20 @@
 # Script that writes its PID to /var/run/myscript.pid and handles signals
 
 PID_FILE="/var/run/myscript.pid"
-
-# /var/run root’a ait olduğu için dosya yoksa sudo ile oluşturup izinleri aç
 if [ ! -e "$PID_FILE" ]; then
     sudo touch "$PID_FILE"
     sudo chmod 666 "$PID_FILE"
 fi
 
-# Kendi PID’sini PID dosyasına yaz
 echo $$ > "$PID_FILE"
-
-# SIGTERM: Mesaj yaz, PID dosyasını sil, çık
 handle_sigterm() {
     echo "I hate the kill command"
     rm -f "$PID_FILE"
     exit 0
 }
-
-# SIGINT (Ctrl+C): Sadece mesaj yaz, çıkma
 handle_sigint() {
     echo "Y U no love me?!"
 }
-
-# SIGQUIT: PID dosyasını sil ve çık
 handle_sigquit() {
     rm -f "$PID_FILE"
     exit 0
@@ -33,8 +24,6 @@ handle_sigquit() {
 trap handle_sigterm TERM
 trap handle_sigint INT
 trap handle_sigquit QUIT
-
-# Sonsuza kadar yazdır
 while true
 do
     echo "To infinity and beyond"
