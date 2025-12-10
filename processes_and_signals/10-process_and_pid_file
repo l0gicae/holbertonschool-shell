@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
+# creates /var/run/myscript.pid and handles signals
+
 PID_FILE="/var/run/myscript.pid"
 
+# write PID
 echo $$ > "$PID_FILE"
 
+# handle signals
 trap 'echo "I hate the kill command"; rm -f "$PID_FILE"; exit 0' TERM
 trap 'echo "Y U no love me?!";' INT
 trap 'rm -f "$PID_FILE"; exit 0' QUIT
 
+# infinite loop
 while true
 do
     echo "To infinity and beyond"
