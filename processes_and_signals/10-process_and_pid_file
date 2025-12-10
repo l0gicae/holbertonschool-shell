@@ -1,16 +1,22 @@
 #!/usr/bin/env bash
-# Creates a PID file, handles signals and loops
 
-pid_file="/var/run/myscript.pid"
+PID_FILE="/var/run/myscript.pid"
 
-trap 'echo "I hate the kill command"; rm -f "$pid_file"; exit' SIGTERM
-trap 'echo "Y U no love me?!"' SIGINT
-trap 'rm -f "$pid_file"; exit' SIGQUIT
+# PID dosyasını oluştur ve PID'i yaz
+echo $$ > "$PID_FILE"
 
-echo $$ > "$pid_file"
+# SIGTERM
+trap 'echo "I hate the kill command"; rm -f "$PID_FILE"; exit 0' TERM
 
+# SIGINT
+trap 'echo "Y U no love me?!";' INT
+
+# SIGQUIT
+trap 'rm -f "$PID_FILE"; exit 0' QUIT
+
+# Sonsuz döngü
 while true
 do
     echo "To infinity and beyond"
-    sleep 2
+    sleep 1
 done
