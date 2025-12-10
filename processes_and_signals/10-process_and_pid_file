@@ -1,36 +1,15 @@
 #!/usr/bin/env bash
-# Script that writes its PID to /var/run/myscript.pid and handles signals
+# Creates a PID file in /var/run/, handles signals and loops
 
-PID_FILE="/var/run/myscript.pid"
+path="/var/run/myscript.pid"
 
-# PID dosyasını oluştur (kendi PID'si ile)
-echo $$ > "$PID_FILE"
+trap 'echo "I hate the kill command"; rm -f "$path"; exit' SIGTERM
+trap 'echo "Y U no love me?!"' SIGINT
+trap 'rm -f "$path"; exit' SIGQUIT
 
-# SIGTERM: Mesaj yaz, PID dosyasını sil, çık
-handle_sigterm() {
-    echo "I hate the kill command"
-    rm -f "$PID_FILE"
-    exit 0
-}
+echo $$ > "$path"
 
-# SIGINT (Ctrl+C): Mesaj yaz (çıkmıyor, devam ediyor)
-handle_sigint() {
-    echo "Y U no love me?!"
-}
-
-# SIGQUIT: PID dosyasını sil ve çık
-handle_sigquit() {
-    rm -f "$PID_FILE"
-    exit 0
-}
-
-trap handle_sigterm TERM
-trap handle_sigint INT
-trap handle_sigquit QUIT
-
-# Sonsuza kadar ekrana yaz
-while true
-do
+while true; do
     echo "To infinity and beyond"
-    sleep 1
+    sleep 2
 done
