@@ -1,25 +1,18 @@
 #!/usr/bin/env bash
 # process and pid file
-
 PID_FILE="/var/run/myscript.pid"
 
-# Eğer PID dosyası yoksa oluştur (root instance tarafından oluşturulur)
 if [ ! -f "$PID_FILE" ]; then
     touch "$PID_FILE"
 fi
 
-# Her ihtimale karşı herkesin yazabilmesi için izinleri aç
 chmod 666 "$PID_FILE"
-
-# PID dosyasına kendi PID'ini yaz
 echo $$ > "$PID_FILE"
 
-# Sinyaller
 trap 'echo "I hate the kill command"; rm -f "$PID_FILE"; exit 0' TERM
 trap 'echo "Y U no love me?!";' INT
 trap 'rm -f "$PID_FILE"; exit 0' QUIT
 
-# Sonsuz döngü
 while true
 do
     echo "To infinity and beyond"
