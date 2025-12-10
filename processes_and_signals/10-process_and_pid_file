@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Creates a PID file in /var/run/, handles signals and loops
+# Creates a PID file, handles signals and loops
 
 pid_file="/var/run/myscript.pid"
 
