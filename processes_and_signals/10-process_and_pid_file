@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Creates /var/run/myscript.pid and handles signals
 
 PID_FILE="/var/run/myscript.pid"
 echo "$$" > "$PID_FILE" 2>/dev/null
