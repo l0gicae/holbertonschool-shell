@@ -3,7 +3,13 @@
 
 PID_FILE="/var/run/myscript.pid"
 
-# PID dosyasını oluştur (kendi PID'si ile)
+# /var/run root’a ait olduğu için dosya yoksa sudo ile oluşturup izinleri aç
+if [ ! -e "$PID_FILE" ]; then
+    sudo touch "$PID_FILE"
+    sudo chmod 666 "$PID_FILE"
+fi
+
+# Kendi PID’sini PID dosyasına yaz
 echo $$ > "$PID_FILE"
 
 # SIGTERM: Mesaj yaz, PID dosyasını sil, çık
@@ -13,7 +19,7 @@ handle_sigterm() {
     exit 0
 }
 
-# SIGINT (Ctrl+C): Mesaj yaz (çıkmıyor, devam ediyor)
+# SIGINT (Ctrl+C): Sadece mesaj yaz, çıkma
 handle_sigint() {
     echo "Y U no love me?!"
 }
@@ -28,7 +34,7 @@ trap handle_sigterm TERM
 trap handle_sigint INT
 trap handle_sigquit QUIT
 
-# Sonsuza kadar ekrana yaz
+# Sonsuza kadar yazdır
 while true
 do
     echo "To infinity and beyond"
