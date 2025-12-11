@@ -1,38 +1,25 @@
 #!/usr/bin/env bash
-# Init-like script to manage manage_my_process
-
-PIDFILE=/var/run/my_process.pid
-SCRIPT=./manage_my_process
+# Manages the manage_my_process daemon
 
 case "$1" in
     start)
-        # Prosesə start ver
-        "$SCRIPT" &
-        echo "$!" > "$PIDFILE"
+        ./manage_my_process &
+        echo "$!" > /var/run/my_process.pid
         echo "manage_my_process started"
         ;;
     stop)
-        # Proses dayandırılsın
-        if [ -f "$PIDFILE" ]; then
-            PID=$(cat "$PIDFILE")
-            kill "$PID" 2>/dev/null || true
-            rm -f "$PIDFILE"
-        fi
+        kill "$(cat /var/run/my_process.pid)"
+        rm /var/run/my_process.pid
         echo "manage_my_process stopped"
         ;;
     restart)
-        # Stop + Start
-        if [ -f "$PIDFILE" ]; then
-            PID=$(cat "$PIDFILE")
-            kill "$PID" 2>/dev/null || true
-            rm -f "$PIDFILE"
-        fi
-        "$SCRIPT" &
-        echo "$!" > "$PIDFILE"
+        kill "$(cat /var/run/my_process.pid)"
+        rm /var/run/my_process.pid
+        ./manage_my_process &
+        echo "$!" > /var/run/my_process.pid
         echo "manage_my_process restarted"
         ;;
     *)
         echo "Usage: manage_my_process {start|stop|restart}"
-        exit 1
         ;;
 esac
